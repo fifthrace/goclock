@@ -2,18 +2,42 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	clockdigits "github.com/fifthrace/goclock/pkg/clockdigits"
 	"github.com/inancgumus/screen"
 )
 
 func main() {
-	newClock := [8]byte{1, 0, clockdigits.Colon, 2, 3, clockdigits.Colon, 5, 9}
 
 	screen.Clear()
 
-	screen.MoveTopLeft()
-	printDigitsLefttoRight(newClock)
+	for {
+		screen.Clear()
+		screen.MoveTopLeft()
+		printDigitsLefttoRight(getClockArray(time.Now()))
+
+		time.Sleep(time.Second)
+	}
+}
+
+func getClockArray(t time.Time) [8]byte {
+	var ret [8]byte
+
+	h := t.Hour()
+	m := t.Minute()
+	s := t.Second()
+
+	ret[0] = byte(h / 10)
+	ret[1] = byte(h % 10)
+	ret[2] = clockdigits.Colon
+	ret[3] = byte(m / 10)
+	ret[4] = byte(m % 10)
+	ret[5] = clockdigits.Colon
+	ret[6] = byte(s / 10)
+	ret[7] = byte(s % 10)
+
+	return ret
 }
 
 func printSingleDigit(n byte) {
@@ -41,16 +65,28 @@ func printDigitsLefttoRight(d [8]byte) {
 
 	//need to print each line from left to right, so we'll loop over lines then the
 	//digits representation per line
-	for linenum := range clock[0] {
-		for _, digit := range clock[linenum] {
-			for _, pixel := range digit {
+
+	//figure out how many lines total (should be 5)
+	for i := 0; i < len(clock[0]); i++ {
+		for _, digit := range clock {
+			for _, pixel := range digit[i] {
 				if pixel {
 					fmt.Print("█")
 				} else {
 					fmt.Print("░")
 				}
 			}
+			fmt.Print("░")
 		}
 		fmt.Println()
 	}
 }
+
+/*
+	if pixel {
+		fmt.Print("█")
+	} else {
+		fmt.Print("░")
+	}
+
+*/
