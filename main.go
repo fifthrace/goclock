@@ -18,7 +18,7 @@ func main() {
 
 	for {
 		screen.MoveTopLeft()
-		printDigitsLefttoRight(getClockArray(time.Now()))
+		printClock(getClockArray(time.Now()))
 
 		time.Sleep(time.Second)
 	}
@@ -43,7 +43,7 @@ func getClockArray(t time.Time) [8]byte {
 	return ret
 }
 
-func printSingleDigit(n byte) {
+func printDigit(n byte) {
 	d := clockdigits.GetDigit(n)
 
 	for _, b := range d {
@@ -58,7 +58,7 @@ func printSingleDigit(n byte) {
 	}
 }
 
-func printDigitsLefttoRight(d [8]byte) {
+func printClock(d [8]byte) {
 	var clock [8]clockdigits.Digit
 
 	//build my clock array
@@ -74,7 +74,7 @@ func printDigitsLefttoRight(d [8]byte) {
 		for j, digit := range clock {
 			for _, pixel := range digit[i] {
 				if pixel {
-					// let's attempt to blink the colons
+					// let's make the colons blink
 					if d[j] == clockdigits.Colon {
 						if time.Now().Second()%2 == 0 {
 							fmt.Print(fg)
