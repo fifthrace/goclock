@@ -8,12 +8,15 @@ import (
 	"github.com/inancgumus/screen"
 )
 
+const fg string = "█"  // █
+const fg2 string = "░" // ░
+const bg string = " "
+
 func main() {
 
 	screen.Clear()
 
 	for {
-		screen.Clear()
 		screen.MoveTopLeft()
 		printDigitsLefttoRight(getClockArray(time.Now()))
 
@@ -46,9 +49,9 @@ func printSingleDigit(n byte) {
 	for _, b := range d {
 		for _, c := range b {
 			if c {
-				fmt.Print("█")
+				fmt.Print(fg)
 			} else {
-				fmt.Print("░")
+				fmt.Print(bg)
 			}
 		}
 		fmt.Println("")
@@ -68,25 +71,25 @@ func printDigitsLefttoRight(d [8]byte) {
 
 	//figure out how many lines total (should be 5)
 	for i := 0; i < len(clock[0]); i++ {
-		for _, digit := range clock {
+		for j, digit := range clock {
 			for _, pixel := range digit[i] {
 				if pixel {
-					fmt.Print("█")
+					// let's attempt to blink the colons
+					if d[j] == clockdigits.Colon {
+						if time.Now().Second()%2 == 0 {
+							fmt.Print(fg)
+						} else {
+							fmt.Print(fg2)
+						}
+					} else {
+						fmt.Print(fg)
+					}
 				} else {
-					fmt.Print("░")
+					fmt.Print(bg)
 				}
 			}
-			fmt.Print("░")
+			fmt.Print(bg)
 		}
 		fmt.Println()
 	}
 }
-
-/*
-	if pixel {
-		fmt.Print("█")
-	} else {
-		fmt.Print("░")
-	}
-
-*/
