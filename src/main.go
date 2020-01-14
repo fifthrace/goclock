@@ -1,16 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	clockdigits "github.com/fifthrace/goclock/pkg/clockdigits"
+)
 
 func main() {
-	fmt.Printf("Let's begin!\n")
 
-	zero := [5][3]string {
-		[3]string = {"█","█","█"},
-		[3]string = {"█","░","█"},
-		[3]string = {"█","░","█"},
-		[3]string = {"█","░","█"},
-		[3]string = {"█","█","█"},
-	}
+	fmt.Printf("%+v", clockdigits.GetDigit(1))
 
 }
